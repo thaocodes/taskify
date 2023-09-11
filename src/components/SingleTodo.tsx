@@ -18,6 +18,13 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }) => {
     // defaul value is the `todo` we want to edit
     const [editTodo, setEditTodo] = useState<string>(todo.todo); 
 
+    // click on edit, focus automatically goes to inside of input box
+    const inputRef = useRef<HTMLInputElement>(null);   // useRef hook
+    // whenever edit changes, fires useEffect 
+    useEffect(() => {
+        inputRef.current?.focus(); // focus on input box
+    }, [edit]);
+
 
     // === Marking Task Complete === //
     const handleDone = (id: number) => {
@@ -45,19 +52,11 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }) => {
         // spread operator: copy all properties of Todo object but update `todo` property
         // (string) to be the edited todo
         setTodos(
-            todos.map((todo) => (todo.id === id ? { ...todo, todo:editTodo } : todo))
+            todos.map((todo) => (todo.id === id ? { ...todo, todo: editTodo } : todo))
             // if id's DON't match, return todo
         );
         setEdit(false);     // reset edit state back to false
     };
-
-    // click on edit, focus automatically goes to inside of input box
-    const inputRef = useRef<HTMLInputElement>(null);   // useRef hook
-
-    // whenever edit changes, fires useEffect 
-    useEffect(() => {
-        inputRef.current?.focus(); // focus on input box
-    }, [edit]);
 
     return (
         // submit even for editing task, takes event object & todo.id
