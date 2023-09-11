@@ -11,8 +11,8 @@ type Props = {
 }
 
 const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }) => {
+    // === Marking Task Complete === //
     const handleDone = (id: number) => {
-        
         setTodos(
             // map thru array, if todo.id matches id
             todos.map((todo) => 
@@ -21,6 +21,13 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }) => {
             )
         );
     };
+
+    // === Deleting a Task === //
+    const handleDelete = (id: number) => {
+        // if todo.id does not matches id, return it 
+        setTodos(todos.filter((todo) => todo.id !== id));
+    };
+
 
 
     return (
@@ -39,7 +46,7 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }) => {
                     <span className="icon">
                         <AiFillEdit />
                     </span>
-                    <span className="icon">
+                    <span className="icon" onClick={() => handleDelete(todo.id)}>
                         <AiFillDelete />
                     </span>
                     {/* fire off handleDone function & send it todo.id */}
