@@ -11,10 +11,30 @@ type Props = {
 }
 
 const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }) => {
+    const handleDone = (id: number) => {
+        
+        setTodos(
+            // map thru array, if todo.id matches id
+            todos.map((todo) => 
+            // take all properties of that `todo`, change .isDone propery & invert the value
+                todo.id === id ? {...todo, isDone: !todo.isDone } : todo    // otherwise return todo
+            )
+        );
+    };
+
+
     return (
         <div>
             <form className="todos__singe">
-                <span className="todos__single--text"></span>
+                {/* if todo is completed, strike it off */}
+                {todo.isDone ? (
+                    //  <s is a strike tag
+                    <s className="todos__single--text">{todo.todo}</s>     
+                ) : (
+                    // otherwise, render normal `todo`
+                    <span className="todos__single--text">{todo.todo}</span>
+                )}
+                
                 <div>
                     <span className="icon">
                         <AiFillEdit />
@@ -22,7 +42,8 @@ const SingleTodo: React.FC<Props> = ({ todo, todos, setTodos }) => {
                     <span className="icon">
                         <AiFillDelete />
                     </span>
-                    <span className="icon">
+                    {/* fire off handleDone function & send it todo.id */}
+                    <span className="icon" onClick={() => handleDone(todo.id)}>
                         <MdDone />
                     </span>
                 </div>
