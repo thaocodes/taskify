@@ -1,6 +1,7 @@
 import React, { useState} from 'react';
 import './App.css';
 import InputField from './components/InputField';
+import TodoList from './components/TodoList';
 import { Todo } from './components/model';
 
 // define react functional component
@@ -10,8 +11,7 @@ const App: React.FC = () => {
   // array of a type Interface, initial value empty array
   const [todos, setTodos] = useState<Todo[]>([]);  // holds list of `Todo` defined in `model.ts`
 
-  // takes event from onSubmit & adds it here
-  // add the todos to this state
+  //===  Add todo  ====//
   const handleAdd = (e: React.FormEvent) => {    // e needs a type, add this in Props too
     e.preventDefault();
 
@@ -28,6 +28,7 @@ const App: React.FC = () => {
     <div className="App">
       <span className="heading">Taskify</span>
       <InputField todo={todo} setTodo={setTodo} handleAdd={handleAdd} />
+      <TodoList todos={todos} setTodos={setTodos} />
     </div>
   );
 }
