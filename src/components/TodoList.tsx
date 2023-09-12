@@ -2,7 +2,7 @@ import React from 'react'
 import { Todo } from './model';
 import "./styles.css";
 import SingleTodo from './SingleTodo';
-import { Droppable } from 'react-beautiful-dnd';
+import { Droppable } from "react-beautiful-dnd";
 
 // define props from App
 interface Props {
@@ -21,14 +21,19 @@ const TodoList: React.FC<Props> = ({ todos, setTodos, completedTodos, setComplet
             {/* wrap in Droppable, requires id to identify drop zone uniquely 
                 and pass it a callback  */}
             <Droppable droppableId="TodosList">
-                {/* callback function takes params (provided) */}
-                {(provided) => (    // takes provided & gives it to parent <div> of this droppable zone
+                {/* callback function takes params (provided, snapshot) */}
+                {(provided, snapshot) => (    // takes provided & gives it to parent <div> of this droppable zone
                     // need to provide ref to parent zone
                     // spread provided.droppableProps
-                    <div className="todos" ref={provided.innerRef} {...provided.droppableProps}>
+                    <div 
+                        // highlights zone that dragged item is hovering over
+                        // if item is dragging over, provide it className `dragactive` otherwise don't provide a className
+                        className={`todos ${snapshot.isDraggingOver ? "dragactive" : ""}`} 
+                        ref={provided.innerRef} {...provided.droppableProps}
+                    >
                         <span className="todos__heading">Active Tasks</span>
                         {/*  take todos state being passed from App & render all todos */}
-                        {todos.map((todo, index) => (
+                        {todos?.map((todo, index) => (
                             // need to send index bc this will track which `todo` is being dragged
                             <SingleTodo    
                                 index={index}
@@ -38,13 +43,18 @@ const TodoList: React.FC<Props> = ({ todos, setTodos, completedTodos, setComplet
                                 setTodos={setTodos}
                             />
                         ))} 
+                        {/* provide space when dragging todo so it can be dropped */}
+                        {provided.placeholder}
                     </div>
                 )}
             </Droppable>
             {/*  completed tasks  */}
             <Droppable droppableId="TodosRemove">
-                {(provided) => (
-                    <div className="todos remove" ref={provided.innerRef} {...provided.droppableProps}>
+                {(provided, snapshot) => (
+                    <div 
+                        className={`todos remove ${snapshot.isDraggingOver ? "dragcomplete" : "remove"}`}
+                        ref={provided.innerRef} {...provided.droppableProps}
+                    >
                         <span className="todos__heading">Completed Tasks</span>
                         {/*  take todos state being passed from App & render all completed todos */}
                         {completedTodos.map((todo, index) => (
@@ -56,6 +66,7 @@ const TodoList: React.FC<Props> = ({ todos, setTodos, completedTodos, setComplet
                                 setTodos={setCompletedTodos}
                             />
                         ))}
+                        {provided.placeholder}
                     </div>
                 )}
             </Droppable>
