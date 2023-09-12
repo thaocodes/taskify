@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Todo } from './model';
 import { AiFillEdit, AiFillDelete  } from "react-icons/ai";
 import { MdDone } from "react-icons/md";
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from "react-beautiful-dnd";
 import "./styles.css";
 
 
@@ -65,10 +65,10 @@ const SingleTodo: React.FC<Props> = ({ index, todo, todos, setTodos }) => {
         // provide unique id (todo.id), index we get from TodoList to keep track of index
         <Draggable draggableId={todo.id.toString()} index={index}> 
             {/* add function, pass it provided */}
-            {(provided) => (
+            {(provided, snapshot) => (
             //  submit event for editing task, takes event object & todo.id 
             <form // pass provided to parent element, provide props & ref
-                className="todos__single" 
+                className={`todos__single ${snapshot.isDragging ? "drag" : ""}`} 
                 onSubmit={(e) => handleEdit(e, todo.id)}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
@@ -100,9 +100,9 @@ const SingleTodo: React.FC<Props> = ({ index, todo, todos, setTodos }) => {
                         // cannot edit task that is already marked Done
                         onClick={() => {
                         // if edit mode is NOT on/true (i.e edit is false) & todo is NOT done
-                            if(!edit && !todo.isDone) {
+                            if (!edit && !todo.isDone) {
                                 // change `edit` to oppositie value (true)
-                                setEdit(!edit)  // initial state of `edit` = false
+                                setEdit(!edit);  // initial state of `edit` = false
                             }
                         }}
                     >
@@ -117,11 +117,10 @@ const SingleTodo: React.FC<Props> = ({ index, todo, todos, setTodos }) => {
                         <MdDone />
                     </span>
                 </div>
-                { todo.todo }
             </form>
             )}
         </Draggable>
     )
 }
 
-export default SingleTodo
+export default SingleTodo;
